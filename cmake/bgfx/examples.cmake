@@ -154,7 +154,7 @@ function(add_example ARG_NAME)
 		endif()
 
 		if(BGFX_BUILD_EXAMPLES)
-			if(IOS OR WIN32)
+			if(IOS OR CMAKE_HOST_WIN32)
 				# on iOS we need to build a bundle so have to copy the data rather than symlink
 				# and on windows we can't create symlinks
 				add_custom_command(
