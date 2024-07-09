@@ -244,10 +244,22 @@ function(add_example ARG_NAME)
 	endif()
 
 	if(NOT ARG_COMMON AND EMSCRIPTEN)
+		set(EM_LINK_OPTIONS "-s PRECISE_F32=1 -s TOTAL_MEMORY=268435456 -s STACK_SIZE=2000000 -s ENVIRONMENT=web -gsource-map --pre-js $ENV{EMSCRIPTEN}/src/emscripten-source-map.min.js --post-js ${BGFX_DIR}/examples/common/webgpu-init.js --emrun")
+
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/font@font")
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/images@images")
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/meshes@meshes")
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/shaders@shaders")
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/text@text")
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/textures@textures")
+
+		if(BGFX_CONFIG_RENDERER_WEBGPU)
+			set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} -s USE_WEBGPU=1")
+		endif()
+
 		set_target_properties(
 			example-${ARG_NAME}
-			PROPERTIES LINK_FLAGS
-					   "-s PRECISE_F32=1 -s TOTAL_MEMORY=268435456 -s ENVIRONMENT=web --memory-init-file 1 --emrun"
+			PROPERTIES LINK_FLAGS "${EM_LINK_OPTIONS}"
 					   SUFFIX ".html"
 		)
 	endif()
