@@ -1,0 +1,69 @@
+{
+	"version": 3,
+	"cmakeMinimumRequired": {
+		"major": 3,
+		"minor": 20,
+		"patch": 0
+	},
+	"configurePresets": [
+		{
+			"name": "emscripten-debug",
+			"binaryDir": "${sourceDir}/build/emscripten-debug",
+			"toolchainFile": "$env{EMSCRIPTEN}/cmake/Modules/Platform/Emscripten.cmake",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"BGFX_BUILD_TOOLS": false,
+				"BGFX_INSTALL_EXAMPLES": true,
+				"BGFX_CONFIG_MULTITHREADED": false
+			},
+			"generator": "Ninja",
+			"environment": {
+				"EMSDK": "D:/Dev/Projects/emsdk",
+				"EMSCRIPTEN": "$env{EMSDK}/upstream/emscripten"
+			}
+		},
+		{
+			"name": "emscripten-debug-webgpu",
+			"binaryDir": "${sourceDir}/build/emscripten-debug-webgpu",
+			"toolchainFile": "$env{EMSCRIPTEN}/cmake/Modules/Platform/Emscripten.cmake",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug",
+				"BGFX_BUILD_TOOLS": false,
+				"BGFX_INSTALL_EXAMPLES": true,
+				"BGFX_CONFIG_MULTITHREADED": false,
+				"BGFX_CONFIG_RENDERER_WEBGPU": true
+			},
+			"generator": "Ninja",
+			"environment": {
+				"EMSDK": "D:/Dev/Projects/emsdk",
+				"EMSCRIPTEN": "$env{EMSDK}/upstream/emscripten"
+			}
+		},
+		{
+			"name": "tools",
+			"binaryDir": "${sourceDir}/build/tools"
+		}
+	],
+	"buildPresets": [
+		{
+			"name": "emscripten-debug",
+			"configurePreset": "emscripten-debug",
+			"jobs": 16
+		},
+		{
+			"name": "emscripten-debug-webgpu",
+			"configurePreset": "emscripten-debug-webgpu",
+			"jobs": 16
+		},
+		{
+			"name": "tools",
+			"displayName": "Tools (shaderc, texturec)",
+			"configurePreset": "tools",
+			"targets": [
+				"shaderc",
+				"texturec"
+			],
+			"jobs": 16
+		}
+	]
+}
