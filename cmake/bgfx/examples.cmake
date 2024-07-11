@@ -244,7 +244,10 @@ function(add_example ARG_NAME)
 	endif()
 
 	if(NOT ARG_COMMON AND EMSCRIPTEN)
-		set(EM_LINK_OPTIONS "-s PRECISE_F32=1 -s TOTAL_MEMORY=268435456 -s STACK_SIZE=2000000 -s ENVIRONMENT=web -gsource-map --pre-js $ENV{EMSCRIPTEN}/src/emscripten-source-map.min.js --post-js ${BGFX_DIR}/examples/common/webgpu-init.js --emrun")
+		set(EM_LINK_OPTIONS "-s PRECISE_F32=1 -s TOTAL_MEMORY=268435456 -s STACK_SIZE=2000000 -s ENVIRONMENT=web -sALLOW_MEMORY_GROWTH --emrun")
+
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} -gsource-map --pre-js $ENV{EMSCRIPTEN}/src/emscripten-source-map.min.js")
+		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --post-js ${BGFX_DIR}/examples/common/webgpu-init.js")
 
 		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/font@font")
 		set(EM_LINK_OPTIONS "${EM_LINK_OPTIONS} --preload-file ${CMAKE_CURRENT_BINARY_DIR}/images@images")
